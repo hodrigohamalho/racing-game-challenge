@@ -1,0 +1,11 @@
+= Racing Game Challenge 
+
+Let's introduce you to the APIs ecosystem by living a real practical experience of a racing game using IoT cars. 
+
+You, as a participant, will be part of a squad, and the team's goal is to interact with APIs that can guide your robot car 
+through the speedway. 
+Besides having lots of fun in this competition, you will learn and understand how to interact, 
+manage and consume real APIs in a practical and enterprise-oriented way using 3Scale. 
+
+Internal doc: https://docs.google.com/presentation/d/1avru7bbiKVuDWKZYTq2djW2dbv4ItH5qsppPCJA0_54
+
