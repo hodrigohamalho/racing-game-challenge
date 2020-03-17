@@ -2,7 +2,7 @@
 
 = Components Setup
 
-img:images/components-connection-diagram.png[]
+image::images/components-connection-diagram.png[]
 
 Arduino IDE download https://www.arduino.cc/en/Main/Software
 
@@ -31,6 +31,6 @@ image::images/boards-manager.png[Boards Manager]
 
 To run this code you need some additional libraries:
 
-image::images/library-websocket.png[Websocket]
+image::images/library-websockets.png[Websocket]
 
 * ArduinoJSON
