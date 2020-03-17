@@ -1,0 +1,314 @@
+<html>
+<!-- Websocket client for controlling ACROBOTIC's wheeled robot PyPi-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+<body onload="javascript:mc_init()">
+  <div class="container">
+    <div class="row cols-sm-6 col-sm-offset-4">
+      <!-- Adding a slider for controlling speed -->
+      <input type="range" min="0" max="100" value="50" id="speedSlider"
+      oninput="setSpeed()" />
+      <label style="text:center" for="speedSlider" id="speedLabel">Speed:
+      50%</label>
+    </div>
+    <div class="row cols-sm-6 col-sm-offset-4">
+        <button class="primary" id="LFT">FRENTE</button>
+        <button class="primary" id="RGT">ATRAS</button>
+        <button class="primary" id="FWD">ESQUERDA</button>
+        <button class="primary" id="BWD">DIREITA</button>
+    </div>
+  </div>
+<script
+<script>
+  // Create global scope variables
+	var socket, speed=50;
+  function mc_init() {
+    // Initialiaze the websocket client
+		socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+    var buttons = document.getElementsByTagName('button');
+    for(i=0;i<buttons.length;i++) {
+      buttons[i].addEventListener('mousedown',move,true);
+      buttons[i].addEventListener('mouseup',stop,true);
+      buttons[i].addEventListener('touchstart',move,true);
+      buttons[i].addEventListener('touchend',stop,true);
+    }
+  }
+  function setSpeed() {
+    speed = document.getElementById("speedSlider").value;
+    speed = parseInt(speed).toFixed(0);
+    document.getElementById("speedLabel").innerHTML = "Speed: " + speed + "%";
+    return false;
+  }
+  function move(e) {
+    e.preventDefault(); // prevent copy-paste menu pop-up on mobile!
+    var data = {'direction':e.srcElement.id,'speed':speed};
+	  socket.send(JSON. stringify(data));
+    return false;
+  }
+  function stop() {
+    var data = {'direction':'STP'};
+	  socket.send(JSON. stringify(data));
+    return false;
+  }
+</script>
+
+
+
+<div class="system">
+  <div class="screen-border">
+    <canvas id="easel" class="screen" width="640" height="560"></canvas>
+  </div>
+  <div class="controls">
+    <h1 class="system-name">Create JS</h1>
+    <div class="d-pad">
+      <div id="d-up" class="button d up"><span class="label">&#9650;</span></div>
+      <div id="d-right" class="button d right"><span class="label">&#9654;</span></div>
+      <div id="d-down" class="button d down"><span class="label">&#9660;</span></div>
+      <div id="d-left" class="button d left"><span class="label">&#9664;</span></div>
+    </div>
+    <div class="control-buttons">
+      <div id="control-a" class="button control a"><span class="label">A</span></div>
+      <div id="control-b" class="button control b"><span class="label">B</span></div>
+    </div>
+    <div class="meta-buttons">
+      <div id="meta-start" class="button meta start"><span class="label">Start</span></div>
+      <div id="meta-select" class="button meta select"><span class="label">Select</span></div>
+    </div>
+  </div>
+  </div>
+  
+  <style>
+  @import "compass/css3";
+
+// COLORS
+$system: #bcbdc2;
+$screen-border: #636c7b;
+$screen: #eee;
+$label: #474881;
+$d-pad: #1d2323;
+$button-group: #afb2b6;
+$control-buttons: #79215b;
+$meta-buttons: #717b85;
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: $system;
+	font-family: 'Source Sans Pro', Verdana, Arial, sans-serif;
+	font-size: 16px;
+	@media screen and ( min-width: 220px ) {
+		font-size: 18px
+	}
+	@media screen and ( min-width: 240px ) {
+		font-size: 20px
+	}
+	@media screen and ( min-width: 260px ) {
+		font-size: 22px
+	}
+	@media screen and ( min-width: 280px ) {
+		font-size: 24px
+	}
+	@media screen and ( min-width: 300px ) {
+		font-size: 26px
+	}
+	@media screen and ( min-width: 320px ) {
+		font-size: 28px
+	}
+	@media screen and ( min-width: 340px ) {
+		font-size: 30px
+	}
+	@media screen and ( min-width: 360px ) {
+		font-size: 32px
+	}
+	@media screen and ( min-width: 380px ) {
+		font-size: 34px
+	}
+	@media screen and ( min-width: 400px ) {
+		font-size: 36px
+	}
+	@media screen and ( min-width: 420px ) {
+		font-size: 38px
+	}
+	@media screen and ( min-width: 440px ) {
+		font-size: 40px
+	}
+	// @media screen and ( min-width: 460px ) {
+	// 	font-size: 42px
+	// }
+	// @media screen and ( min-width: 480px ) {
+	// 	font-size: 44px
+	// }
+	// @media screen and ( min-width: 500px ) {
+	// 	font-size: 46px
+	// }
+}
+.system {
+	float: left;
+	padding: 1em;
+	padding-bottom: 2em;
+}
+.screen-border {
+	background: $screen-border;
+	padding: .5em 1em;
+	border-radius: .25em .25em 1em .25em;
+}
+
+.screen {
+	background: $screen;
+	width: 320px;
+	max-width: 100%;
+}
+.controls {
+	position: relative;
+	padding-bottom: 3em;
+}
+.button {
+	cursor: pointer;
+	box-shadow: 0 0 3px 1px #555;
+	color: $label;
+	text-align: center;
+	&:hover {
+		box-shadow: 0 0 5px 1px #333;
+	}
+	&:active {
+		box-shadow: 0 0 5px 1px #333 inset;
+	}
+	.label {
+		font-size: .4em;
+		position: relative;
+		text-transform: uppercase;
+	}
+}
+
+.system-name {
+	color: $label;
+	font-style: italic;
+  font-weight: bold;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+	font-size: .4em;
+	padding-top: .5em;
+	padding-bottom: 2em;
+}
+.d-pad {
+	width: 3em;
+	height: 3em;
+	position: relative;
+}
+
+.d {
+	width: 1em;
+	height: 1em;
+	background: $d-pad;
+	position: absolute;
+	border-top: .05em solid lighten($d-pad, 40%);
+	border-bottom: .05em solid darken($d-pad, 20%);
+	&:hover, &:active {
+		background: lighten($d-pad, 15%);
+	}
+}
+
+.up {
+	left: 1em;
+	top: 0;
+	border-radius: .25em .25em 0 0;
+	.label {
+		top: -3em;
+	}
+}
+.right {
+	top: 1em;
+	right: 0;
+	border-radius: 0 .25em .25em 0;
+	.label {
+		top: -1em;
+		right: -2em;
+	}
+}
+.down {
+	left: 1em;
+	bottom: 0;
+	border-radius: 0 0 .25em .25em;
+	.label {
+		bottom: -1em;
+	}
+}
+.left {
+	top: 1em;
+	left: 0;
+	border-radius: .25em 0 0 .25em;
+	.label {
+		top: -1em;
+		left: -2em;
+	}
+}
+
+.control-buttons {
+	position: absolute;
+	right: 0;
+	top: 2em;
+	background: $button-group;
+	border-radius: 2em;
+}
+.control {
+	background: $control-buttons;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 1.5em;
+	float: right;
+	margin: .25em;
+	border-top: .05em solid lighten($control-buttons, 40%);
+	border-bottom: .05em solid darken($control-buttons, 20%);
+	&:hover, &:active {
+		background: lighten($control-buttons, 5%);
+	}
+	.label {
+		bottom: -3em;
+	}
+}
+
+.meta-buttons {
+	position: absolute;
+	background: $button-group;
+	top: 6em;
+	left: 2.5em;
+	border-radius: 2em;
+}
+
+.meta {
+	background: $meta-buttons;
+	width: 1.8em;
+	height: .5em;
+	border-radius: .4em;
+	float: right;
+	margin: .25em;
+	border-top: .05em solid lighten($meta-buttons, 10%);
+	border-bottom: .05em solid darken($meta-buttons, 10%);
+	&:hover, &:active {
+		background: lighten($meta-buttons, 5%);
+	}
+	.label {
+		bottom: -.6em;
+	}
+}
+.message {
+	font-size: .5em;
+	color: $label;
+	font-style: italic;
+}
+.control-key {
+	padding: 1.6em;
+	font-size: .4em;
+	float: left;
+	border: 1px solid $label;
+	color: $label;
+	ul {
+		padding-left: 2em;
+	}
+}
+  
+  </style>
+</body>
+</html>
