@@ -1,6 +1,8 @@
 = Setup
 
-Useful links: https://www.youtube.com/watch?v=gU7vlhU1HvU
+= Components Setup
+
+img:images/components-connection-diagram.png[]
 
 Arduino IDE download https://www.arduino.cc/en/Main/Software
 
@@ -21,9 +23,14 @@ So download and install .dmg for nodemcu-pyflasher
 https://github.com/marcelstoer/nodemcu-pyflasher/releases
 
 
-=== Install ESP8266 into the IDE 
+=== Install Library Modules
 
 https://github.com/esp8266/Arduino#installing-with-boards-manager
 
-img:images/boards-manager.png[]
+image::images/boards-manager.png[Boards Manager]
 
+To run this code you need some additional libraries:
+
+image::images/library-websocket.png[Websocket]
+
+* ArduinoJSON
